@@ -9,17 +9,19 @@ def dfs(graph, start, goal, path=None, visited=None):
     :return: Lista con el camino al producto o None si no se encuentra.
     """
     if path is None:
-        path = [start]
+        path = [start]  # Inicializamos el camino con el nodo de inicio
     if visited is None:
-        visited = set()
+        visited = set()  # Inicializamos el conjunto de nodos visitados
 
-    visited.add(start)  # Marcamos el nodo como visitado
+    visited.add(start)  # Marcamos el nodo actual como visitado
 
-    if start == goal:  # Si encontramos el producto, devolvemos el camino
+    if start == goal:  # Si el nodo actual es el objetivo, devolvemos el camino
         return path
 
-    for neighbor in graph.get(start, []):  # Recorremos las subcategorías o productos
+    # Recorremos los vecinos del nodo actual
+    for neighbor in graph.get(start, []):  # Obtenemos los vecinos del nodo actual
         if neighbor not in visited:  # Solo exploramos nodos no visitados
+            # Llamada recursiva para explorar el vecino
             result = dfs(graph, neighbor, goal, path + [neighbor], visited)
             if result:  # Si encontramos el producto, devolvemos el camino
                 return result
@@ -29,28 +31,28 @@ def dfs(graph, start, goal, path=None, visited=None):
 
 # Definimos el catálogo de la tienda como un grafo
 catalogo = {
-    "Inicio": ["Camisetas", "Sudaderas", "Accesorios"],
-    "Camisetas": ["Camiseta Blanca", "Camiseta Negra", "Camiseta Roja"],
-    "Sudaderas": ["Sudadera Azul", "Sudadera Gris"],
-    "Accesorios": ["Gorras", "Calcetines"],
-    "Gorras": ["Gorra Negra", "Gorra Blanca"],
-    "Calcetines": ["Calcetines Largos", "Calcetines Cortos"],
+    "Inicio": ["Camisetas", "Sudaderas", "Accesorios"],  # Nodo raíz con las categorías principales
+    "Camisetas": ["Camiseta Blanca", "Camiseta Negra", "Camiseta Roja"],  # Subcategorías de camisetas
+    "Sudaderas": ["Sudadera Azul", "Sudadera Gris"],  # Subcategorías de sudaderas
+    "Accesorios": ["Gorras", "Calcetines"],  # Subcategorías de accesorios
+    "Gorras": ["Gorra Negra", "Gorra Blanca"],  # Subcategorías de gorras
+    "Calcetines": ["Calcetines Largos", "Calcetines Cortos"],  # Subcategorías de calcetines
 }
 
 # Buscamos un producto específico en el catálogo
-producto_a_buscar = "Sudadera Gris"
-camino = dfs(catalogo, "Inicio", producto_a_buscar)
+producto_a_buscar = "Sudadera Gris"  # Producto que queremos encontrar
+camino = dfs(catalogo, "Inicio", producto_a_buscar)  # Llamamos a la función DFS
 
 # Mostramos el resultado
 if camino:
+    # Si encontramos el producto, mostramos el camino para llegar a él
     print(f"Producto encontrado: {producto_a_buscar}")
     print(f"Camino para encontrarlo: {camino}")
 else:
+    # Si no encontramos el producto, mostramos un mensaje de error
     print(f"El producto '{producto_a_buscar}' no se encuentra en el catálogo.")
 
-    #PODEMOS HACER INTERACTIVO ESTE SISTEMA AGREGANDO INPUTS DE BUSQUEDA   
-# Y MOSTRANDO LOS RESULTADOS EN UNA INTERFAZ GRAFICA
-# O EN UNA PAGINA WEB
-# O SIMPLEMENTE EN LA CONSOLA
-
-#DE LA SIGUIENTE MANERA:
+# Comentario adicional:
+# Podemos hacer interactivo este sistema agregando inputs de búsqueda
+# y mostrando los resultados en una interfaz gráfica, en una página web
+# o simplemente en la consola.
