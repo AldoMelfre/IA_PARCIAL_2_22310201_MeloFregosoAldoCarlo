@@ -5,7 +5,7 @@
 import random
 
 # DESCRIPCIÓN TEÓRICA:
-# Este algoritmo utiliza la estrategia epsilon-greedy para equilibrar exploración y explotación.
+# Este azlgoritmo utiliza la estrategia epsilon-greedy para equilibrar exploración y explotación.
 # Además, busca la política óptima seleccionando la mejor acción para cada estado según los valores Q aprendidos.
 
 # ============================================

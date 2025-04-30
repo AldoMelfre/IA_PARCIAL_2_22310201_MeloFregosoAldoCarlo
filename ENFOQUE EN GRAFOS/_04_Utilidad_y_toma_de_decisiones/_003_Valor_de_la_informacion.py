@@ -54,6 +54,7 @@ def calcular_valor_de_la_informacion(acciones, estados, costo_informacion=0):
         for probabilidades, utilidades in acciones.values()
     )
 
+
     # Utilidad esperada con información perfecta
     utilidad_con_informacion = 0
     for estado, probabilidad_estado in estados.items():
