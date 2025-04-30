@@ -2,6 +2,8 @@
 # EXPLORACIÓN VS. EXPLOTACIÓN: ESTRATEGIA EPSILON-GREEDY
 # ============================================
 
+import random
+
 # DESCRIPCIÓN TEÓRICA:
 # El dilema de exploración vs. explotación se refiere a cómo un agente decide entre:
 # - **Explorar:** Probar nuevas acciones para descubrir más información sobre el entorno.
