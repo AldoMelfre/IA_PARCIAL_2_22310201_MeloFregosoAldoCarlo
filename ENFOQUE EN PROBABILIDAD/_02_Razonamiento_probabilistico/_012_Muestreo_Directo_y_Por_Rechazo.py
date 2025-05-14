@@ -1,4 +1,4 @@
-import random
+import random  # Importa el módulo random para generar números aleatorios
 
 # ============================================
 # MUETREO DIRECTO EN REDES BAYESIANAS
@@ -17,7 +17,7 @@ def muestreo_directo(red_bayesiana, num_muestras):
     variables = list(red_bayesiana.keys())
 
     # Generar las muestras
-    for _ in range(num_muestras):
+    for _ in range(num_muestras):  # Itera num_muestras veces para generar las muestras
         muestra = {}  # Diccionario para almacenar los valores de las variables en esta muestra
 
         # Iterar sobre las variables en orden topológico
@@ -33,7 +33,7 @@ def muestreo_directo(red_bayesiana, num_muestras):
             muestra[variable] = random.random() < prob  # True si el número aleatorio es menor que la probabilidad
         muestras.append(muestra)  # Agregar la muestra generada a la lista
 
-    return muestras
+    return muestras  # Devuelve la lista de muestras generadas
 
 # ============================================
 # MUETREO POR RECHAZO EN REDES BAYESIANAS
@@ -51,12 +51,12 @@ def muestreo_por_rechazo(red_bayesiana, evidencia, num_muestras):
 
     # Filtrar las muestras que coinciden con la evidencia
     muestras_compatibles = []
-    for muestra in muestras:
+    for muestra in muestras:  # Itera sobre cada muestra generada
         # Verificar si la muestra es compatible con la evidencia
-        if all(muestra[var] == valor for var, valor in evidencia.items()):
+        if all(muestra[var] == valor for var, valor in evidencia.items()):  # Comprueba si todas las variables de la evidencia coinciden
             muestras_compatibles.append(muestra)  # Agregar la muestra compatible
 
-    return muestras_compatibles
+    return muestras_compatibles  # Devuelve las muestras compatibles con la evidencia
 
 # ============================================
 # FUNCIÓN PARA CALCULAR DISTRIBUCIÓN CONDICIONAL
@@ -69,15 +69,15 @@ def calcular_distribucion_condicional(muestras, variable):
     :return: Distribución condicional de la variable.
     """
     # Contar las ocurrencias de True y False para la variable
-    conteo = {True: 0, False: 0}
-    for muestra in muestras:
-        conteo[muestra[variable]] += 1
+    conteo = {True: 0, False: 0}  # Inicializa un contador para True y False
+    for muestra in muestras:  # Itera sobre cada muestra
+        conteo[muestra[variable]] += 1  # Incrementa el contador según el valor de la variable
 
     # Normalizar los conteos para obtener probabilidades
-    total = sum(conteo.values())
-    distribucion = {valor: conteo[valor] / total for valor in conteo}
+    total = sum(conteo.values())  # Suma el total de ocurrencias
+    distribucion = {valor: conteo[valor] / total for valor in conteo}  # Calcula la probabilidad de cada valor
 
-    return distribucion
+    return distribucion  # Devuelve la distribución condicional
 
 # ============================================
 # EJEMPLO: RED BAYESIANA SIMPLE
@@ -85,15 +85,15 @@ def calcular_distribucion_condicional(muestras, variable):
 # Definimos una red bayesiana simple
 red_bayesiana = {
     "A": {
-        "Padres": [],
+        "Padres": [],  # La variable A no tiene padres
         "CPT": {(): 0.2}  # Probabilidad de A=True es 0.2
     },
     "B": {
-        "Padres": ["A"],
+        "Padres": ["A"],  # La variable B depende de A
         "CPT": {(True,): 0.8, (False,): 0.5}  # Probabilidad de B=True dado A
     },
     "C": {
-        "Padres": ["B"],
+        "Padres": ["B"],  # La variable C depende de B
         "CPT": {(True,): 0.7, (False,): 0.1}  # Probabilidad de C=True dado B
     }
 }
@@ -102,20 +102,20 @@ red_bayesiana = {
 # EJEMPLO: MUETREO DIRECTO
 # ============================================
 print("=== Muestreo Directo ===")
-num_muestras = 1000
-muestras = muestreo_directo(red_bayesiana, num_muestras)
-print(f"Se generaron {len(muestras)} muestras.")
+num_muestras = 1000  # Número de muestras a generar
+muestras = muestreo_directo(red_bayesiana, num_muestras)  # Genera muestras usando muestreo directo
+print(f"Se generaron {len(muestras)} muestras.")  # Imprime el número de muestras generadas
 print("Primeras 5 muestras:")
-print(muestras[:5])
+print(muestras[:5])  # Muestra las primeras 5 muestras generadas
 
 # ============================================
 # EJEMPLO: MUETREO POR RECHAZO
 # ============================================
 print("\n=== Muestreo por Rechazo ===")
-evidencia = {"C": True}
-muestras_compatibles = muestreo_por_rechazo(red_bayesiana, evidencia, num_muestras)
-print(f"Se generaron {len(muestras_compatibles)} muestras compatibles con la evidencia {evidencia}.")
+evidencia = {"C": True}  # Evidencia observada: C=True
+muestras_compatibles = muestreo_por_rechazo(red_bayesiana, evidencia, num_muestras)  # Filtra muestras compatibles con la evidencia
+print(f"Se generaron {len(muestras_compatibles)} muestras compatibles con la evidencia {evidencia}.")  # Imprime el número de muestras compatibles
 
 # Calcular la distribución condicional de A dado C=True
-distribucion = calcular_distribucion_condicional(muestras_compatibles, "A")
-print(f"Distribución condicional de A dado C=True: {distribucion}")
+distribucion = calcular_distribucion_condicional(muestras_compatibles, "A")  # Calcula la distribución condicional de A
+print(f"Distribución condicional de A dado C=True: {distribucion}")  # Imprime la distribución condicional

@@ -1,8 +1,21 @@
-import random
+"""
+Descripción teórica:
+La ponderación de verosimilitud es un método de muestreo utilizado en redes bayesianas para calcular probabilidades condicionales. 
+Este enfoque genera muestras ponderadas basadas en la evidencia observada y las relaciones de probabilidad entre las variables de la red. 
+El peso de cada muestra refleja cuán consistente es con la evidencia proporcionada. 
+El algoritmo sigue el orden topológico de las variables en la red, asegurando que las dependencias entre variables se respeten al generar las muestras.
 
-# ============================================
-# PONDERACIÓN DE VEROSIMILITUD EN REDES BAYESIANAS
-# ============================================
+Parámetros:
+- red_bayesiana: Representa la estructura de la red bayesiana, donde cada variable tiene padres y una tabla de probabilidad condicional (CPT).
+- evidencia: Contiene las variables observadas y sus valores (True/False).
+- num_muestras: Número de muestras que se generarán.
+
+Salida:
+- Una lista de tuplas, donde cada tupla contiene una muestra generada y su peso asociado.
+"""
+
+import random  # Importamos el módulo random para generar números aleatorios
+
 def ponderacion_de_verosimilitud(red_bayesiana, evidencia, num_muestras):
     """
     Realiza ponderación de verosimilitud para calcular probabilidades condicionales en una red bayesiana.
@@ -11,34 +24,34 @@ def ponderacion_de_verosimilitud(red_bayesiana, evidencia, num_muestras):
     :param num_muestras: Número de muestras a generar.
     :return: Lista de muestras con sus pesos.
     """
-    muestras_ponderadas = []
+    muestras_ponderadas = []  # Lista para almacenar las muestras generadas junto con sus pesos
 
-    for _ in range(num_muestras):
-        muestra = {}
-        peso = 1.0  # Inicializamos el peso de la muestra en 1
+    for _ in range(num_muestras):  # Iteramos para generar el número de muestras especificado
+        muestra = {}  # Diccionario para almacenar los valores de las variables en la muestra actual
+        peso = 1.0  # Inicializamos el peso de la muestra en 1 (neutro)
 
         # Generar la muestra siguiendo el orden topológico de las variables
-        for variable in red_bayesiana:
-            padres = red_bayesiana[variable]["Padres"]
-            cpt = red_bayesiana[variable]["CPT"]
+        for variable in red_bayesiana:  # Iteramos sobre cada variable en la red bayesiana
+            padres = red_bayesiana[variable]["Padres"]  # Obtenemos los padres de la variable actual
+            cpt = red_bayesiana[variable]["CPT"]  # Obtenemos la tabla de probabilidad condicional (CPT) de la variable
 
             # Obtener los valores de los padres en la muestra actual
-            valores_padres = tuple(muestra[p] for p in padres)
+            valores_padres = tuple(muestra[p] for p in padres)  # Creamos una tupla con los valores de los padres
 
-            if variable in evidencia:
-                # Si la variable está en la evidencia, ajustamos el peso
-                prob = cpt[valores_padres]
+            if variable in evidencia:  # Si la variable está en la evidencia proporcionada
+                prob = cpt[valores_padres]  # Obtenemos la probabilidad de la variable dado los valores de sus padres
+                # Ajustamos el peso de la muestra según la consistencia con la evidencia
                 peso *= prob if evidencia[variable] else (1 - prob)
                 muestra[variable] = evidencia[variable]  # Fijamos el valor de la variable según la evidencia
-            else:
-                # Si la variable no está en la evidencia, generamos un valor aleatorio
-                prob = cpt[valores_padres]
+            else:  # Si la variable no está en la evidencia
+                prob = cpt[valores_padres]  # Obtenemos la probabilidad de la variable dado los valores de sus padres
+                # Generamos un valor aleatorio para la variable basado en su probabilidad
                 muestra[variable] = random.random() < prob
 
-        # Agregar la muestra y su peso a la lista
+        # Agregar la muestra y su peso a la lista de resultados
         muestras_ponderadas.append((muestra, peso))
 
-    return muestras_ponderadas
+    return muestras_ponderadas  # Devolvemos la lista de muestras con sus pesos
 
 # ============================================
 # FUNCIÓN PARA CALCULAR DISTRIBUCIÓN CONDICIONAL
